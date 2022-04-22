@@ -47,8 +47,6 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
         #parse collection keywords -> convert multiple spaces to one space and remove comma separator
         collectionBaseName = " ".join((" ".join(properties.tracker_collection_keywords.split(","))).split())
 
-        collectionName = collectionBaseName
-
         if properties.sort_morph_trackers:
             for object in properties.trackers_root_collection.objects:
 
@@ -70,7 +68,7 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
                 #join the keywords using only one space
                 customKeywords = " ".join(customKeywords)
 
-                collectionName += " " + customKeywords
+                collectionName = collectionBaseName + " " + customKeywords
 
                 trackerCollectionIndex = properties.trackers_root_collection.children.find(collectionName)
                 trackerCollection = None
