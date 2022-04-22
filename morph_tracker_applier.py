@@ -23,7 +23,7 @@ class EMOTICONS_UTILS_PT_morph_tracker_panel(bpy.types.Panel):
 class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
     bl_label = "Apply morph trackers"
     bl_idname = "emoticons_utils.apply_morph_trackers"
-    keywords = ["low", "right", "left", "arm", "end", "leg", "anchor", "body", "head"]
+    keywords = ["low", "right", "left", "arm", ".end", "leg", "anchor", "body", "head"]
     
     def execute(self, context):
         scene = context.scene
@@ -47,6 +47,8 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
         #parse collection keywords -> convert multiple spaces to one space and remove comma separator
         collectionBaseName = " ".join((" ".join(properties.tracker_collection_keywords.split(","))).split())
 
+        collectionName = collectionBaseName
+
         if properties.sort_morph_trackers:
             for object in properties.trackers_root_collection.objects:
 
@@ -68,7 +70,7 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
                 #join the keywords using only one space
                 customKeywords = " ".join(customKeywords)
 
-                collectionName = collectionBaseName + " " + customKeywords
+                collectionName += " " + customKeywords
 
                 trackerCollectionIndex = properties.trackers_root_collection.children.find(collectionName)
                 trackerCollection = None
@@ -94,7 +96,7 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
                 continue
 
             srcArmature = properties.tracker_emoticons_armature
-            srcChildren = srcArmature.children
+            srcChildren = srcArmature.children #the parent model objects
             armature = srcArmature.copy()
         
             self.linkObject(armature, srcArmature)
@@ -121,6 +123,8 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
                 childCopy.select_set(False)
                 armature.select_set(False)
             
+            armature.name = collectionName
+            
             #go through the trackers in the collection
             for object in coll.objects:
                 boneName = self.parseName(object.name)
@@ -145,7 +149,7 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
         if "low" in name:
             if "right" in name:
                 if "arm" in name:
-                    if "end" in name:
+                    if ".end" in name:
                         return "low_right_arm.end"
                     else:
                         return "low_right_arm"
@@ -153,7 +157,7 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
                     return "low_leg_right"
             elif "left" in name:
                 if "arm" in name:
-                    if "end" in name:
+                    if ".end" in name:
                         return "low_left_arm.end"
                     else:
                         return "low_left_arm"
