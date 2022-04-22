@@ -54,13 +54,13 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
                 if not object.parent is None or self.parseName(object.name) == None:
                     continue
 
-                #remove all the _ and .
-                customName = object.name.replace("_", " ")
-                customName = customName.replace(".", " ")
-
                 #remove all the emoticon limb names
                 for emoticonsKey in self.keywords:
                     customName = customName.replace(emoticonsKey, " ")
+
+                #remove all the _ and .
+                customName = object.name.replace("_", " ")
+                customName = customName.replace(".", " ")
 
                 #split the customname using dynamic amount of spaces
                 customKeywords = customName.split()
