@@ -123,7 +123,7 @@ class EMOTICONS_UTILS_OT_apply_morph_trackers(bpy.types.Operator):
                 childCopy.select_set(False)
                 armature.select_set(False)
             
-            armature.name = collectionName
+            armature.name = coll.name
             
             #go through the trackers in the collection
             for object in coll.objects:
