@@ -6,8 +6,11 @@ This Blender add-on adds utility functions to work with Emoticons inside Blender
 
 **Mixamo to Emoticons converter**
 
-**IMPORTANT!**
-Mixamo changed the rig of the X-Bot character, which means you need to upload the old rig provided in this file `mixamo_old_rig.fbx` and use it ![Screenshot_629](https://user-images.githubusercontent.com/71967555/201525241-db40f01b-bc39-4d54-9350-4691255a0385.png)
+## IMPORTANT before usage:
+Mixamo changed the rig of the X-Bot character, which means you need to upload the old rig provided in this file `mixamo_old_rig.fbx` and use it.
+
+![Screenshot_629](https://user-images.githubusercontent.com/71967555/201525241-db40f01b-bc39-4d54-9350-4691255a0385.png)
+
 
 You can convert Mixamo rigs / animation to Emoticons rigs. You just import the FBX file of mixamo and the emoticons rig and select them in the menu. You also have options to, for example, also conver the hand animation or limit the rotation axis for some limbs. Every button has a tooltip for further explanations.
 <hr>
