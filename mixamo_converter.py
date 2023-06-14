@@ -75,7 +75,7 @@ class EMOTICONS_UTILS_OT_convert_mixamo(bpy.types.Operator):
                             if properties.use_human_parent_space:
                                 bone.rotation_quaternion = self.getParentSpace(mixamoBone, 2) @ bone.rotation_quaternion
                         else:
-                            bone.location = mixamoBone.location
+                            bone.location = mixamoBone.location * properties.mixamo_armature.scale
                         
                             bone.location[0] *= -1
                             bone.location[1] *= 1
