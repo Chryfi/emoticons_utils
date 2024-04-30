@@ -75,11 +75,9 @@ class EMOTICONS_UTILS_OT_convert_mixamo(bpy.types.Operator):
                             if properties.use_human_parent_space:
                                 bone.rotation_quaternion = self.getParentSpace(mixamoBone, 2) @ bone.rotation_quaternion
                         else:
-                            bone.location = mixamoBone.location * properties.mixamo_armature.scale
-                        
-                            bone.location[0] *= -1
-                            bone.location[1] *= 1
-                            bone.location[2] *= -1
+                            bone.location[0] = -(mixamoBone.location[0] * properties.mixamo_armature.scale[0])
+                            bone.location[1] =  (mixamoBone.location[1] * properties.mixamo_armature.scale[1])
+                            bone.location[2] = -(mixamoBone.location[2] * properties.mixamo_armature.scale[2])
                         
                         self.mirrorQuat(bone.rotation_quaternion, 'Y')
                     elif "arm" in bone.name:
@@ -121,7 +119,7 @@ class EMOTICONS_UTILS_OT_convert_mixamo(bpy.types.Operator):
             for bone in properties.emoticons_armature.pose.bones:
                 bpy.context.object.data.bones.active = bone.bone
                 
-            self.eulerFilter(properties)
+            self.eulerFilter(properties.emoticons_armature, properties)
             
         return {'FINISHED'}
         
@@ -199,10 +197,30 @@ class EMOTICONS_UTILS_OT_convert_mixamo(bpy.types.Operator):
 
         return self.getParentSpace(bone.parent, depth - 1) @ bone.parent.rotation_quaternion
             
-    def eulerFilter(self, properties):
+    def eulerFilter(self, object_with_animaton, properties):
         if not properties.use_euler_filter:
             return
         
+        object_with_animaton.select_set(True)  
+        action = object_with_animaton.animation_data.action
+        fcurves = action.fcurves
+        
+        context_override = bpy.context.copy()
+        context_override["object"] = object_with_animaton
+        context_override["active_object"] = object_with_animaton
+        context_override["selected_objects"] = [object_with_animaton]
+        context_override["selected_editable_objects"] = [object_with_animaton]
+        context_override["selected_editable_objects"] = [object_with_animaton]
+        context_override["active_action"] = action
+        context_override["selected_editable_actions"] = [action]
+        context_override["active_editable_fcurve"] = fcurves[0]
+        context_override["selected_visible_fcurves"] = fcurves
+        context_override["selected_editable_fcurves"] = fcurves
+
+        window = bpy.context.window
+        screen = window.screen
+
+
         window = bpy.context.window
         screen = window.screen
 
@@ -211,11 +229,16 @@ class EMOTICONS_UTILS_OT_convert_mixamo(bpy.types.Operator):
             if area.type != 'TOPBAR':
                 oldtype = area.type
                 area.type = 'GRAPH_EDITOR'
-                override = {'window': window, 'screen': screen, 'area': area}
-
-                bpy.ops.graph.euler_filter(override)
+                context_override["window"] = window
+                context_override["screen"] = screen
+                context_override["area"] = area
+                context_override["region"] = area.regions[0]
+                try:
+                    with bpy.context.temp_override(**context_override):
+                        bpy.ops.graph.euler_filter()
+                except Exception as e:
+                    print(str(e))
                 area.type = oldtype
-
                 break
         
     def selectSoloObj(self, obj):
