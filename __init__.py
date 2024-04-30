@@ -1,8 +1,8 @@
 bl_info = {
     "name": "Emoticons Utils",
     "author": "Christian F. (known as Chryfi)",
-    "version": (1, 0, 1),
-    "blender": (2, 80, 0),
+    "version": (1, 0, 4),
+    "blender": (4, 0, 0),
     "location": "3D window toolshelf > emoticons utils tab",
     "description": "This addon adds some utility functions that can become handy when working with the Minecraft Emoticons mod rigs.",
     "warning": "",
